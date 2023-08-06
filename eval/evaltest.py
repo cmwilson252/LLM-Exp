@@ -10,7 +10,9 @@ tokenized_data = torch.load("/path/to/your/tokenized_data.pt")
 file_path = "/path/to/your/spreadsheet.xlsx"
 data = pd.read_csv(file_path, header=None)
 data_array = data.values
-correct_answers = data_array[:, 5].astype(int).tolist()  # Update as needed for correct answers
+# Map the letter choices to numerical indices
+correct_answers_map = {'a': 0, 'b': 1, 'c': 2, 'd': 3}
+correct_answers = [correct_answers_map[answer.lower()] for answer in data_array[:, 5]]
 
 # Load the model
 model = AutoModelForMultipleChoice.from_pretrained('llama2_model_name')
