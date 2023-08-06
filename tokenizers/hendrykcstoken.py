@@ -4,10 +4,11 @@ import torch
 
 # Load the data from the spreadsheet
 file_path = "/cow02/rudenko/colowils/LLMExp/LLM-Exp/eval/data/college_chemistry_test.csv"
-data = pd.read_csv(file_path)
-questions = data[0].tolist()
-choices = data[[1, 2, 3, 4]].values.tolist()
-correct_answers = data[5].tolist()
+data = pd.read_csv(file_path
+data_array = data.values)
+questions = data_array[:, 0].tolist()
+choices = data_array[:, 1:5].tolist()
+correct_answers = data_array[:, 5].tolist()
 
 # Load the tokenizer
 tokenizer = AutoTokenizer.from_pretrained('/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf')
