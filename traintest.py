@@ -21,6 +21,18 @@ class TokenizedDataset(Dataset):
     def __getitem__(self, idx):
         return torch.tensor(self.data[idx])
 
+class CustomTrainer(Trainer):
+    def log(self, logs, iterator=None):
+        # Log the original metrics
+        super().log(logs, iterator)
+
+        # Log the loss to wandb
+        wandb.log({'loss': logs.get('loss', 0)})
+
+        # Log the learning rate if available
+        if 'learning_rate' in logs:
+            wandb.log({'learning_rate': logs['learning_rate']})
+
 # Load the dataset
 train_dataset = TokenizedDataset("/cow02/rudenko/colowils/LLMExp/tokenized_data.txt", tokenizer)
 
@@ -44,7 +56,7 @@ training_args = TrainingArguments(
 )
 
 # Define the Trainer
-trainer = Trainer(
+trainer = CustomTrainer(
     model=model,
     args=training_args,
     train_dataset=train_dataset,
