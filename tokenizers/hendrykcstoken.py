@@ -6,8 +6,8 @@ import torch
 file_path = "/cow02/rudenko/colowils/LLMExp/LLM-Exp/eval/data/college_chemistry_test.csv"
 data = pd.read_csv(file_path)
 data_array = data.values
-questions = data_array[:, 0].astype(str).tolist()
-choices = [[str(choice) for choice in choice_list] for choice_list in data_array[:, 1:5]]
+questions = data_array[:, 0].tolist()
+choices = data_array[:, 1:5].tolist()
 correct_answers = data_array[:, 5].tolist()
 
 # Load the tokenizer
