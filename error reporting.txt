@@ -1,12 +1,22 @@
 Traceback (most recent call last):
-  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/traintest.py", line 31, in <module>
-    model = AutoModelForMaskedLM.from_pretrained("/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf")
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 496, in from_pretrained
-    raise ValueError(
-ValueError: Unrecognized configuration class <class 'transformers.models.llama.configuration_llama.LlamaConfig'> for this kind of AutoModel: AutoModelForMaskedLM.
-Model type should be one of AlbertConfig, BartConfig, BertConfig, BigBirdConfig, CamembertConfig, ConvBertConfig, Data2VecTextConfig, DebertaConfig, DebertaV2Config, DistilBertConfig, ElectraConfig, ErnieConfig, EsmConfig, FlaubertConfig, FNetConfig, FunnelConfig, IBertConfig, LayoutLMConfig, LongformerConfig, LukeConfig, MBartConfig, MegaConfig, MegatronBertConfig, MobileBertConfig, MPNetConfig, MraConfig, MvpConfig, NezhaConfig, NystromformerConfig, PerceiverConfig, QDQBertConfig, ReformerConfig, RemBertConfig, RobertaConfig, RobertaPreLayerNormConfig, RoCBertConfig, RoFormerConfig, SqueezeBertConfig, TapasConfig, Wav2Vec2Config, XLMConfig, XLMRobertaConfig, XLMRobertaXLConfig, XmodConfig, YosoConfig.
+  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3653, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 147, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 176, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7080, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7088, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'question_column_name'
 
-2023-08-05 21:00:21.851874: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2023-08-05 21:00:23.705605: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/tokenizers/hendrykcstoken.py", line 8, in <module>
+    questions = data['question_column_name'].tolist()
+                ~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/pandas/core/frame.py", line 3761, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3655, in get_loc
+    raise KeyError(key) from err
+KeyError: 'question_column_name'
