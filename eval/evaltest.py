@@ -1,0 +1,58 @@
+import pandas as pd
+import torch
+from transformers import AutoModelForMultipleChoice
+from torch.utils.data import DataLoader
+
+# Load the tokenized data
+tokenized_data = torch.load("/path/to/your/tokenized_data.pt")
+
+# Load the Excel file without headers to extract the correct answers
+file_path = "/path/to/your/spreadsheet.xlsx"
+data = pd.read_csv(file_path, header=None)
+data_array = data.values
+correct_answers = data_array[:, 5].astype(int).tolist()  # Update as needed for correct answers
+
+# Load the model
+model = AutoModelForMultipleChoice.from_pretrained('llama2_model_name')
+model.eval()  # Set the model to evaluation mode
+
+# Define a custom dataset class
+class TokenizedDataset(torch.utils.data.Dataset):
+    def __init__(self, tokenized_data, correct_answers):
+        self.tokenized_data = tokenized_data
+        self.correct_answers = correct_answers
+    
+    def __len__(self):
+        return len(self.tokenized_data)
+    
+    def __getitem__(self, idx):
+        item = self.tokenized_data[idx]
+        label = self.correct_answers[idx]
+        return item, label
+
+# Create the dataset and DataLoader
+dataset = TokenizedDataset(tokenized_data, correct_answers)
+dataloader = DataLoader(dataset, batch_size=16)  # Adjust batch size as needed
+
+# Evaluate the model
+correct = 0  # Count of correct predictions
+total = 0   # Total number of questions
+
+with torch.no_grad():
+    for batch, labels in dataloader:
+        # Prepare the inputs for the model
+        inputs = {key: torch.stack([item[key] for item in batch], dim=0) for key in batch[0].keys()}
+        
+        # Forward pass
+        outputs = model(**inputs)
+        logits = outputs.logits
+        
+        # Determine the predicted answers
+        predictions = torch.argmax(logits, dim=1)
+        
+        # Calculate accuracy
+        correct += (predictions == labels).sum().item()
+        total += len(labels)
+
+accuracy = correct / total
+print(f"Accuracy: {accuracy * 100:.2f}%")
