@@ -28,13 +28,20 @@ class TokenizedDataset(torch.utils.data.Dataset):
         return len(self.tokenized_data)
     
     def __getitem__(self, idx):
-        item = self.tokenized_data[idx]
+        item = {key: value.squeeze() for key, value in self.tokenized_data[idx].items()}
         label = self.correct_answers[idx]
         return item, label
 
+# Create the dataset and DataLoader with padding
+from torch.nn.utils.rnn import pad_sequence
+def collate_fn(batch):
+    inputs = {key: pad_sequence([item[key] for item in batch[0]], batch_first=True) for key in batch[0][0].keys()}
+    labels = torch.tensor(batch[1])
+    return inputs, labels
+
 # Create the dataset and DataLoader
 dataset = TokenizedDataset(tokenized_data, correct_answers)
-dataloader = DataLoader(dataset, batch_size=16)  # Adjust batch size as needed
+dataloader = DataLoader(dataset, batch_size=16, collate_fn=collate_fn)  # Adjust batch size as needed
 
 # Evaluate the model
 correct = 0  # Count of correct predictions
