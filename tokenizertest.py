@@ -2,9 +2,6 @@ from datasets import load_dataset
 from transformers import AutoTokenizer
 import os
 
-# Load the dataset
-dataset = load_dataset("orieg/elsevier-oa-cc-by")
-
 # Function to extract and join text
 def extract_and_join_text(example):
     title = example.get('title', '')
@@ -14,8 +11,11 @@ def extract_and_join_text(example):
     full_text = f"{title} {abstract} {body_text}"
     return full_text
 
+# Load the dataset
+dataset = load_dataset("orieg/elsevier-oa-cc-by")
+
 # Path to your downloaded tokenizer
-tokenizer_path = 'path/to/your/tokenizer'
+tokenizer_path = "/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf"
 
 # Load the tokenizer
 tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
