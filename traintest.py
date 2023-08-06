@@ -2,15 +2,18 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 from transformers import AutoModelForMaskedLM, TrainingArguments, Trainer
 import wandb
+from transformers import AutoTokenizer
 
 wandb.init(project="traintest")
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+tokenizer = AutoTokenizer.from_pretrained("/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf")
+
 class TokenizedDataset(Dataset):
-    def __init__(self, file_path):
+    def __init__(self, file_path, tokenizer):
         with open(file_path, 'r') as file:
-            self.data = [list(map(int, line.strip().split())) for line in file]
+            self.data = [tokenizer.encode(line.strip()) for line in file]
 
     def __len__(self):
         return len(self.data)
@@ -19,7 +22,7 @@ class TokenizedDataset(Dataset):
         return torch.tensor(self.data[idx])
 
 # Load the dataset
-train_dataset = TokenizedDataset("/cow02/rudenko/colowils/LLMExp/tokenized_data.txt")
+train_dataset = TokenizedDataset("/cow02/rudenko/colowils/LLMExp/tokenized_data.txt", tokenizer)
 
 # Create a DataLoader
 train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
@@ -51,7 +54,7 @@ trainer = Trainer(
 trainer.train()
 
 # Save the model
-#trainer.save_model("./output")
+trainer.save_model("./output")
 
 wandb.config.learning_rate = training_args.learning_rate
 
