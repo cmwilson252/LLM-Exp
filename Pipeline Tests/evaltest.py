@@ -28,7 +28,7 @@ class TokenizedDataset(torch.utils.data.Dataset):
         return len(self.tokenized_data)
     
     def __getitem__(self, idx):
-        item = self.tokenized_data[idx]
+        item = self.tokenized_data[idx]['input_ids']
         label = self.correct_answers[idx]
         return item, label
 
