@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import DataLoader, Dataset
-from transformers import AutoModelForMaskedLM, TrainingArguments, Trainer
+from transformers import AutoModel, TrainingArguments, Trainer
 import wandb
 from transformers import AutoTokenizer
 
@@ -21,18 +21,6 @@ class TokenizedDataset(Dataset):
     def __getitem__(self, idx):
         return torch.tensor(self.data[idx])
 
-class CustomTrainer(Trainer):
-    def log(self, logs, iterator=None):
-        # Log the original metrics
-        super().log(logs, iterator)
-
-        # Log the loss to wandb
-        wandb.log({'loss': logs.get('loss', 0)})
-
-        # Log the learning rate if available
-        if 'learning_rate' in logs:
-            wandb.log({'learning_rate': logs['learning_rate']})
-
 # Load the dataset
 train_dataset = TokenizedDataset("/cow02/rudenko/colowils/LLMExp/tokenized_data.txt", tokenizer)
 
@@ -40,7 +28,7 @@ train_dataset = TokenizedDataset("/cow02/rudenko/colowils/LLMExp/tokenized_data.
 train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
 
 # Load the pre-trained model (modify as needed for your specific model)
-model = AutoModelForMaskedLM.from_pretrained("/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf")
+model = AutoModel.from_pretrained("/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf")
 model.to(device)
 
 # Define the training arguments
@@ -56,7 +44,7 @@ training_args = TrainingArguments(
 )
 
 # Define the Trainer
-trainer = CustomTrainer(
+trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=train_dataset,
@@ -67,7 +55,5 @@ trainer.train()
 
 # Save the model
 trainer.save_model("./output")
-
-wandb.config.learning_rate = training_args.learning_rate
 
 print("Training complete. Model saved to ./output")
