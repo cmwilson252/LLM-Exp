@@ -1,5 +1,5 @@
 Traceback (most recent call last):
-  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/eval/evaltest.py", line 44, in <module>
+  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/eval/evaltest.py", line 51, in <module>
     for batch, labels in dataloader:
   File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/dataloader.py", line 633, in __next__
     data = self._next_data()
@@ -7,34 +7,13 @@ Traceback (most recent call last):
   File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/dataloader.py", line 677, in _next_data
     data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 54, in fetch
-    return self.collate_fn(data)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py", line 265, in default_collate
-    return collate(batch, collate_fn_map=default_collate_fn_map)
+  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py", line 142, in collate
-    return [collate(samples, collate_fn_map=collate_fn_map) for samples in transposed]  # Backwards compatibility.
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py", line 142, in <listcomp>
-    return [collate(samples, collate_fn_map=collate_fn_map) for samples in transposed]  # Backwards compatibility.
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py", line 145, in collate
-    return elem_type([collate(samples, collate_fn_map=collate_fn_map) for samples in transposed])
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py", line 145, in <listcomp>
-    return elem_type([collate(samples, collate_fn_map=collate_fn_map) for samples in transposed])
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py", line 127, in collate
-    return elem_type({key: collate([d[key] for d in batch], collate_fn_map=collate_fn_map) for key in elem})
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py", line 127, in <dictcomp>
-    return elem_type({key: collate([d[key] for d in batch], collate_fn_map=collate_fn_map) for key in elem})
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py", line 119, in collate
-    return collate_fn_map[elem_type](batch, collate_fn_map=collate_fn_map)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py", line 162, in collate_tensor_fn
-    return torch.stack(batch, 0, out=out)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-RuntimeError: stack expects each tensor to be equal size, but got [1, 37] at entry 0 and [1, 25] at entry 1
+  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+            ~~~~~~~~~~~~^^^^^
+  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/eval/evaltest.py", line 31, in __getitem__
+    item = {key: value.squeeze() for key, value in self.tokenized_data[idx].items()}
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'items'
