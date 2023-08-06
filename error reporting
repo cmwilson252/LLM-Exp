@@ -1,0 +1,14 @@
+2023-08-05 20:41:15.347420: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-08-05 20:41:17.059638: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Traceback (most recent call last):
+  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/traintest.py", line 22, in <module>
+    train_dataset = TokenizedDataset("/cow02/rudenko/colowils/LLMExp/tokenized_data.txt")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/traintest.py", line 13, in __init__
+    self.data = [list(map(int, line.strip().split())) for line in file]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/traintest.py", line 13, in <listcomp>
+    self.data = [list(map(int, line.strip().split())) for line in file]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '▁A'

@@ -5,6 +5,8 @@ import wandb
 
 wandb.init(project="traintest")
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 class TokenizedDataset(Dataset):
     def __init__(self, file_path):
         with open(file_path, 'r') as file:
@@ -24,6 +26,7 @@ train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
 
 # Load the pre-trained model (modify as needed for your specific model)
 model = AutoModelForMaskedLM.from_pretrained("/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf")
+model.to(device)
 
 # Define the training arguments
 training_args = TrainingArguments(
