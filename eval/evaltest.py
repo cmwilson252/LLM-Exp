@@ -1,13 +1,13 @@
 import pandas as pd
 import torch
-from transformers import AutoModelForMultipleChoice
+from transformers import LlamaModel
 from torch.utils.data import DataLoader
 
 # Load the tokenized data
-tokenized_data = torch.load("/path/to/your/tokenized_data.pt")
+tokenized_data = torch.load("/cow02/rudenko/colowils/LLMExp/hbio.pt")
 
 # Load the Excel file without headers to extract the correct answers
-file_path = "/path/to/your/spreadsheet.xlsx"
+file_path = "/cow02/rudenko/colowils/LLMExp/LLM-Exp/eval/data/college_chemistry_test.csv"
 data = pd.read_csv(file_path, header=None)
 data_array = data.values
 # Map the letter choices to numerical indices
@@ -15,7 +15,7 @@ correct_answers_map = {'a': 0, 'b': 1, 'c': 2, 'd': 3}
 correct_answers = [correct_answers_map[answer.lower()] for answer in data_array[:, 5]]
 
 # Load the model
-model = AutoModelForMultipleChoice.from_pretrained('llama2_model_name')
+model = LlamaModel.from_pretrained('/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf')
 model.eval()  # Set the model to evaluation mode
 
 # Define a custom dataset class
