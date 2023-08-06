@@ -13,11 +13,11 @@ correct_answers = data_array[:, 5].tolist()
 # Load the tokenizer
 tokenizer = AutoTokenizer.from_pretrained('/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf')
 
-# Tokenize the questions and choices
 tokenized_data = []
-for question, choices_list in zip(questions, choices):
-    encoded = tokenizer(question, choices_list, return_tensors="pt", padding=False, truncation=False)
-    tokenized_data.append(encoded)
+for question, choice_list in zip(questions, choices):
+    # Combine the question with each choice and tokenize
+    tokenized_choices = [tokenizer.encode_plus(question, choice, return_tensors="pt", padding=True, truncation=True) for choice in choice_list]
+    tokenized_data.append(tokenized_choices)
 
 # Save the tokenized data to a file
 save_path = "/cow02/rudenko/colowils/LLMExp/"
