@@ -36,8 +36,8 @@ class TokenizedDataset(torch.utils.data.Dataset):
 from torch.nn.utils.rnn import pad_sequence
 def collate_fn(batch):
     inputs = {key: pad_sequence([item[key] for item, _ in batch], batch_first=True) for key in batch[0][0].keys()}
-    labels = torch.tensor([label for _, label in batch])
-    return inputs, labels
+    labels = [label for _, label in batch]
+    return inputs, torch.tensor(labels)
 
 # Create the dataset and DataLoader
 dataset = TokenizedDataset(tokenized_data, correct_answers)
