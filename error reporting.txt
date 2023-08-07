@@ -7,13 +7,10 @@ Traceback (most recent call last):
   File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/dataloader.py", line 677, in _next_data
     data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
-    data = [self.dataset[idx] for idx in possibly_batched_index]
-            ~~~~~~~~~~~~^^^^^
-  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/Pipeline Tests/evaltest.py", line 31, in __getitem__
-    item = {key: value.squeeze() for key, value in self.tokenized_data[idx].items()}
-                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'list' object has no attribute 'items'
+  File "/cow02/rudenko/colowils/Miniconda3/envs/LLM/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py", line 54, in fetch
+    return self.collate_fn(data)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/Pipeline Tests/evaltest.py", line 38, in collate_fn
+    inputs = {key: pad_sequence([item[key] for item, _ in batch], batch_first=True) for key in batch[0][0].keys()}
+                                                                                               ^^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
