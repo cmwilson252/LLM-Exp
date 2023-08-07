@@ -17,13 +17,13 @@ for i in range(3):
     question_data = tokenized_data[i]
     question_text = tokenizer.decode(question_data['input_ids'][0])
     answers_text = [tokenizer.decode(choice) for choice in question_data['input_ids'][1:]]
-    correct_answer_text = correct_answers_text[i]
-
-    # Find the index of the correct answer based on the text
-    correct_answer_index = answers_text.index(correct_answer_text)
+    correct_answer_letter = correct_answer_letters[i]
+    
+    # Convert the correct answer letter to an index (0 for "A", 1 for "B", etc.)
+    correct_answer_index = ord(correct_answer_letter) - ord('A')
 
     print(f"Question {i + 1}: {question_text}")
     print("Answer Choices:")
     for j, answer in enumerate(answers_text):
         print(f"{chr(97 + j)}. {answer}")
-    print(f"Correct Answer: {chr(97 + correct_answer_index)}. {correct_answer_text}\n")
+    print(f"Correct Answer: {chr(97 + correct_answer_index)}. {answers_text[correct_answer_index]}\n")
