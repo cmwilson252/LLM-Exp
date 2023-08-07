@@ -9,8 +9,14 @@ data_df = pd.read_csv(data_csv_path, header=None)
 # Load the tokenized data
 tokenized_data = torch.load("/cow02/rudenko/colowils/LLMExp/LLM-Exp/tokenizers/tokenized_data/hchem.pt")
 
+
+# Path to your downloaded tokenizer
+tokenizer_path = "/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf"
+# Load the tokenizer
+tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+
 # Read the correct answers as text
-correct_answers_text = data_df[5].tolist()
+correct_answer_letters = data_df[5].tolist()
 
 # Print the first 3 questions and their related answers + correct answer
 for i in range(3):
