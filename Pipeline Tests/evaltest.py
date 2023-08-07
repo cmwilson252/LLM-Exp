@@ -4,7 +4,7 @@ from transformers import LlamaModel
 from torch.utils.data import DataLoader
 
 # Load the tokenized data
-tokenized_data = torch.load("/cow02/rudenko/colowils/LLMExp/LLM-Exp/tokenizers/tokenized_data/hbio.pt")
+tokenized_data = torch.load("/cow02/rudenko/colowils/LLMExp/LLM-Exp/tokenizers/tokenized_data/hchem.pt")
 
 # Load the Excel file without headers to extract the correct answers
 file_path = "/cow02/rudenko/colowils/LLMExp/LLM-Exp/eval/data/college_chemistry_test.csv"

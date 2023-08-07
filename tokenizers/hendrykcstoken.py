@@ -22,5 +22,5 @@ for question, choices_list in zip(questions, choices):
 
 
 # Save the tokenized data to a file
-save_path = "/cow02/rudenko/colowils/LLMExp/hbio.pt"
+save_path = "/cow02/rudenko/colowils/LLMExp/LLM-Exp/tokenizers/tokenized_data/hchem.pt"
 torch.save(tokenized_data, save_path)
