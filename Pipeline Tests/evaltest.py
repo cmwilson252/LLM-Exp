@@ -1,12 +1,12 @@
 import torch
 import pandas as pd
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from transformers import AutoTokenizer, LlamaPreTrainedModel
 
 # Constants
-PT_FILE_PATH = "/path/to/tokenized_questions.pt" # Replace with the actual path to the .pt file
-CSV_PATH = "/mnt/data/college_chemistry_test.csv"
-MODEL_PATH = "path_to_model" # Replace with the actual path to the Llama2 model
-RESULTS_PATH = "/mnt/data/results.txt"
+PT_FILE_PATH = "/cow02/rudenko/colowils/LLMExp/LLM-Exp/tokenizers/tokenized_data/hchem.pt" # Replace with the actual path to the .pt file
+CSV_PATH = "/cow02/rudenko/colowils/LLMExp/LLM-Exp/eval/data/college_chemistry_test.csv"
+MODEL_PATH = "/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf" # Replace with the actual path to the Llama2 model
+RESULTS_PATH = "/cow02/rudenko/colowils/LLMExp/LLM-Exp/results.txt"
 
 # Load tokenized questions from .pt file
 tokenized_questions = torch.load(PT_FILE_PATH)
@@ -17,7 +17,7 @@ correct_answers = csv_data.iloc[:, 5]
 
 # Load LLM (Llama2) model
 tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
-model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_PATH)
+model = LlamaPreTrainedModel.from_pretrained(MODEL_PATH)
 
 # Function to get model prediction
 def get_prediction(tokenized_question):
