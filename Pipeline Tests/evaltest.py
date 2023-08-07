@@ -1,68 +1,42 @@
-import pandas as pd
 import torch
-from transformers import LlamaModel
-from torch.utils.data import DataLoader
-from torch.nn.utils.rnn import pad_sequence
+import pandas as pd
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
-# Load the tokenized data
-tokenized_data = torch.load("/cow02/rudenko/colowils/LLMExp/LLM-Exp/tokenizers/tokenized_data/hchem.pt")
+# Constants
+PT_FILE_PATH = "/path/to/tokenized_questions.pt" # Replace with the actual path to the .pt file
+CSV_PATH = "/mnt/data/college_chemistry_test.csv"
+MODEL_PATH = "path_to_model" # Replace with the actual path to the Llama2 model
+RESULTS_PATH = "/mnt/data/results.txt"
 
-# Load the Excel file without headers to extract the correct answers
-file_path = "/cow02/rudenko/colowils/LLMExp/LLM-Exp/eval/data/college_chemistry_test.csv"
-data = pd.read_csv(file_path, header=None)
-data_array = data.values
-# Map the letter choices to numerical indices
-correct_answers_map = {'a': 0, 'b': 1, 'c': 2, 'd': 3}
-correct_answers = [correct_answers_map[answer.lower()] for answer in data_array[:, 5]]
+# Load tokenized questions from .pt file
+tokenized_questions = torch.load(PT_FILE_PATH)
 
-# Load the model
-model = LlamaModel.from_pretrained('/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf')
-model.eval()  # Set the model to evaluation mode
+# Load correct answer choices from the CSV file's sixth column
+csv_data = pd.read_csv(CSV_PATH)
+correct_answers = csv_data.iloc[:, 5]
 
-# Define a custom dataset class
-class TokenizedDataset(torch.utils.data.Dataset):
-    def __init__(self, tokenized_data, correct_answers):
-        self.tokenized_data = tokenized_data
-        self.correct_answers = correct_answers
-    
-    def __len__(self):
-        return len(self.tokenized_data)
-    
-    def __getitem__(self, idx):
-        item = self.tokenized_data[idx]['input_ids']
-        label = self.correct_answers[idx]
-        return item, label
+# Load LLM (Llama2) model
+tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
+model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_PATH)
 
-# Create the dataset and DataLoader with padding
-from torch.nn.utils.rnn import pad_sequence
-def collate_fn(batch):
-    inputs = {key: pad_sequence([item[key] for item, _ in batch], batch_first=True) for key in batch[0][0].keys()}
-    labels = [label for _, label in batch]
-    return inputs, torch.tensor(labels)
+# Function to get model prediction
+def get_prediction(tokenized_question):
+    inputs = tokenizer(tokenized_question, return_tensors="pt")
+    output = model.generate(**inputs)
+    answer = tokenizer.decode(output[0])
+    return answer
 
-# Create the dataset and DataLoader
-dataset = TokenizedDataset(tokenized_data, correct_answers)
-dataloader = DataLoader(dataset, batch_size=16, collate_fn=collate_fn)  # Adjust batch size as needed
+# Benchmarking the model
+results = []
+for tokenized_question, correct_answer in zip(tokenized_questions, correct_answers):
+    prediction = get_prediction(tokenized_question)
+    results.append((tokenized_question, prediction, correct_answer, prediction == correct_answer))
 
-# Evaluate the model
-correct = 0  # Count of correct predictions
-total = 0   # Total number of questions
+# Calculating accuracy
+accuracy = sum(result[-1] for result in results) / len(results)
 
-with torch.no_grad():
-    for batch, labels in dataloader:
-        # Prepare the inputs for the model
-        inputs = {key: torch.stack([item[key] for item in batch], dim=0) for key in batch[0].keys()}
-        
-        # Forward pass
-        outputs = model(**inputs)
-        logits = outputs.logits
-        
-        # Determine the predicted answers
-        predictions = torch.argmax(logits, dim=1)
-        
-        # Calculate accuracy
-        correct += (predictions == labels).sum().item()
-        total += len(labels)
-
-accuracy = correct / total
-print(f"Accuracy: {accuracy * 100:.2f}%")
+# Saving the results
+with open(RESULTS_PATH, "w") as file:
+    file.write(f"Accuracy: {accuracy}\n")
+    for result in results:
+        file.write(f"Question: {result[0]}\nPrediction: {result[1]}\nCorrect Answer: {result[2]}\nCorrect: {result[3]}\n\n")
