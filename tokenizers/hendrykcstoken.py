@@ -3,10 +3,10 @@ from transformers import AutoTokenizer
 import torch
 
 # Load the data from the uploaded CSV file
-file_path_csv = "/mnt/data/college_chemistry_test.csv"
+file_path_csv = "/cow02/rudenko/colowils/LLMExp/LLM-Exp/eval/data/college_chemistry_test.csv"
 data = pd.read_csv(file_path_csv)
 questions = data.iloc[:, 0].tolist()
-choices = data.iloc[:, 1:4].tolist()  # Adjusted to include only columns 1 to 4 for the choices
+choices = data.iloc[:, 1:4].values.tolist()  # Adjusted to include only columns 1 to 4 for the choices
 
 # Load the tokenizer
 tokenizer_model_path = '/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf'
@@ -16,6 +16,8 @@ tokenizer = AutoTokenizer.from_pretrained(tokenizer_model_path)
 max_length = max(len(tokenizer.tokenize(text)) for question, choices_list in zip(questions, choices)
                  for text in [question + " " + str(choice) for choice in choices_list])
 
+tokenizer.pad_token = tokenizer.eos_token
+
 # Tokenize the questions and choices with padding to the calculated maximum length
 tokenized_data_adjusted = []
 for question, choices_list in zip(questions, choices):
@@ -23,7 +25,7 @@ for question, choices_list in zip(questions, choices):
     encoded_data_choices = []
     for choice in choices_list:
         combined_text = question + " " + str(choice)
-        encoded_data = tokenizer([combined_text], padding='max_length', max_length=max_length, truncation=False)
+        encoded_data = tokenizer([combined_text], padding='max_length', max_length=max_length, truncation=False,)
         encoded_data_choices.append(encoded_data)
     
     # Append the tokenized data for this question
