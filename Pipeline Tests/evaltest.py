@@ -2,6 +2,7 @@ import pandas as pd
 import torch
 from transformers import LlamaModel
 from torch.utils.data import DataLoader
+from torch.nn.utils.rnn import pad_sequence
 
 # Load the tokenized data
 tokenized_data = torch.load("/cow02/rudenko/colowils/LLMExp/LLM-Exp/tokenizers/tokenized_data/hchem.pt")
