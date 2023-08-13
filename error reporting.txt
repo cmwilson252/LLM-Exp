@@ -9,3 +9,4 @@ Traceback (most recent call last):
     self.data = [tokenizer.encode(line.strip()) for line in file]
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "<frozen codecs>", line 322, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x80 in position 64: invalid start byte
