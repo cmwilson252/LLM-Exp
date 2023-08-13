@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
 from transformers import AutoModel, TrainingArguments, Trainer
 import wandb
@@ -12,23 +13,28 @@ tokenizer = AutoTokenizer.from_pretrained("/cow02/rudenko/colowils/LLMExp/Llama-
 
 class TokenizedDataset(Dataset):
     def __init__(self, file_path, tokenizer):
-        with open(file_path, 'r') as file:
-            self.data = [tokenizer.encode(line.strip()) for line in file]
+        # Load pt file
+        self.data = torch.load(file_path)
+        self.tokenizer = tokenizer
 
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        return torch.tensor(self.data[idx])
+        item = self.data[idx]
+        encoded_item = self.tokenizer.encode(item)
+        return encoded_item
 
 # Load the dataset
-train_dataset = TokenizedDataset("/cow02/rudenko/colowils/LLMExp/tokenized_data.txt", tokenizer)
+train_dataset = TokenizedDataset("/cow02/rudenko/colowils/LLMExp/LLM-Exp/tokenizers/tokenized_data/hchem.pt", tokenizer)
 
 # Create a DataLoader
 train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
 
 # Load the pre-trained model (modify as needed for your specific model)
 model = AutoModel.from_pretrained("/cow02/rudenko/colowils/LLMExp/Llama-2-7b-chat-hf")
+if torch.cuda.device_count() > 1:
+    model = nn.DataParallel(model)
 model.to(device)
 
 # Define the training arguments
