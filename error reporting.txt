@@ -1,12 +1,138 @@
+base) [colowils@vds-gre AlphaFold2]$ python "/cow02/rudenko/colowils/AlphaFold2/test.py"
+2023-08-18 08:28:56.117801: E external/xla/xla/stream_executor/cuda/cuda_dnn.cc:413] There was an error before creating cudnn handle (302): cudaGetErrorName symbol not found. : cudaGetErrorString symbol not found.
 Traceback (most recent call last):
-  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/Pipeline Tests/traintest.py", line 25, in <module>
-    train_dataset = TokenizedDataset("/cow02/rudenko/colowils/LLMExp/LLM-Exp/tokenizers/tokenized_data/hchem.pt", tokenizer)
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/Pipeline Tests/traintest.py", line 16, in __init__
-    self.data = [tokenizer.encode(line.strip()) for line in file]
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/cow02/rudenko/colowils/LLMExp/LLM-Exp/Pipeline Tests/traintest.py", line 16, in <listcomp>
-    self.data = [tokenizer.encode(line.strip()) for line in file]
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<frozen codecs>", line 322, in decode
-UnicodeDecodeError: 'utf-8' codec can't decode byte 0x80 in position 64: invalid start byte
+  File "/cow02/rudenko/colowils/AlphaFold2/test.py", line 15, in <module>
+    model.prep_inputs()
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/colabdesign/af/prep.py", line 174, in _prep_hallucination
+    self._prep_model(**kwargs)
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/colabdesign/af/prep.py", line 35, in _prep_model
+    self.restart(**kwargs)
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/colabdesign/af/design.py", line 55, in restart
+    self.set_seed(seed)
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/colabdesign/shared/model.py", line 163, in set_seed
+    self.key = Key(seed=seed).get
+               ^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/colabdesign/shared/utils.py", line 95, in __init__
+    self.key = jax.random.PRNGKey(self.seed) 
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/random.py", line 177, in PRNGKey
+    return _return_prng_keys(True, _key('PRNGKey', seed, impl))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/random.py", line 139, in _key
+    return prng.seed_with_impl(impl, seed)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/prng.py", line 406, in seed_with_impl
+    return random_seed(seed, impl=impl)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/prng.py", line 689, in random_seed
+    return random_seed_p.bind(seeds_arr, impl=impl)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/prng.py", line 701, in random_seed_impl
+    base_arr = random_seed_impl_base(seeds, impl=impl)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/prng.py", line 706, in random_seed_impl_base
+    return seed(seeds)
+           ^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/prng.py", line 935, in threefry_seed
+    return _threefry_seed(seed)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/traceback_util.py", line 166, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/pjit.py", line 253, in cache_miss
+    outs, out_flat, out_tree, args_flat, jaxpr = _python_pjit_helper(
+                                                 ^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/pjit.py", line 166, in _python_pjit_helper
+    out_flat = pjit_p.bind(*args_flat, **params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/core.py", line 2596, in bind
+    return self.bind_with_trace(top_trace, args, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/core.py", line 389, in bind_with_trace
+    out = trace.process_primitive(self, map(trace.full_raise, args), params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/core.py", line 821, in process_primitive
+    return primitive.impl(*tracers, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/pjit.py", line 1209, in _pjit_call_impl
+    return xc._xla.pjit(name, f, call_impl_cache_miss, [], [], donated_argnums,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/pjit.py", line 1192, in call_impl_cache_miss
+    out_flat, compiled = _pjit_call_impl_python(
+                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/pjit.py", line 1128, in _pjit_call_impl_python
+    always_lower=False, lowering_platform=None).compile()
+                                                ^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/interpreters/pxla.py", line 2206, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/interpreters/pxla.py", line 2544, in from_hlo
+    xla_executable, compile_options = _cached_compilation(
+                                      ^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/interpreters/pxla.py", line 2454, in _cached_compilation
+    xla_executable = dispatch.compile_or_get_cached(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/dispatch.py", line 496, in compile_or_get_cached
+    return backend_compile(backend, computation, compile_options,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/profiler.py", line 314, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/dispatch.py", line 464, in backend_compile
+    return backend.compile(built_c, compile_options=options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jax._src.traceback_util.UnfilteredStackTrace: jaxlib.xla_extension.XlaRuntimeError: FAILED_PRECONDITION: DNN library initialization failed. Look at the errors above for more details.
+
+The stack trace below excludes JAX-internal frames.
+The preceding is the original exception that occurred, unmodified.
+
+--------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/cow02/rudenko/colowils/AlphaFold2/test.py", line 15, in <module>
+    model.prep_inputs()
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/colabdesign/af/prep.py", line 174, in _prep_hallucination
+    self._prep_model(**kwargs)
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/colabdesign/af/prep.py", line 35, in _prep_model
+    self.restart(**kwargs)
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/colabdesign/af/design.py", line 55, in restart
+    self.set_seed(seed)
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/colabdesign/shared/model.py", line 163, in set_seed
+    self.key = Key(seed=seed).get
+               ^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/colabdesign/shared/utils.py", line 95, in __init__
+    self.key = jax.random.PRNGKey(self.seed) 
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/random.py", line 177, in PRNGKey
+    return _return_prng_keys(True, _key('PRNGKey', seed, impl))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/random.py", line 139, in _key
+    return prng.seed_with_impl(impl, seed)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/prng.py", line 406, in seed_with_impl
+    return random_seed(seed, impl=impl)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/prng.py", line 689, in random_seed
+    return random_seed_p.bind(seeds_arr, impl=impl)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/core.py", line 386, in bind
+    return self.bind_with_trace(find_top_trace(args), args, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/core.py", line 389, in bind_with_trace
+    out = trace.process_primitive(self, map(trace.full_raise, args), params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/core.py", line 821, in process_primitive
+    return primitive.impl(*tracers, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/prng.py", line 701, in random_seed_impl
+    base_arr = random_seed_impl_base(seeds, impl=impl)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/prng.py", line 706, in random_seed_impl_base
+    return seed(seeds)
+           ^^^^^^^^^^^
+  File "/cow02/rudenko/colowils/Miniconda3/lib/python3.11/site-packages/jax/_src/prng.py", line 935, in threefry_seed
+    return _threefry_seed(seed)
+           ^^^^^^^^^^^^^^^^^^^^
+jaxlib.xla_extension.XlaRuntimeError: FAILED_PRECONDITION: DNN library initialization failed. Look at the errors above for more details.
